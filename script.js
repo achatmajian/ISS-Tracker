@@ -43,6 +43,20 @@ async function getISS() {
     const data = await response.json();
     const { latitude, longitude, velocity, altitude, timestamp, visibility } = data;
 
+
+    const peopleResponse = await fetch("http://api.open-notify.org/astros.json");
+    const peopleData = await peopleResponse.json();
+    const { people, name, craft } = peopleData;
+    console.log(people[0].name);
+    console.log(people[0].craft);
+    console.log(name);
+    console.log(craft);
+    // if (people.craft === "ISS") {
+    //     console.log(people);
+    // }
+
+
+
     /* Initialise Reverse Geocode API Client */
     var reverseGeocoder = new BDCReverseGeocode();
 
@@ -59,8 +73,14 @@ async function getISS() {
     }, function (result) {
         console.log(result);
         document.getElementById("locality").textContent = result.locality;
+        // document.getElementById("locality-info").textContent = result.localityInfo.informative[0].description;
+        // document.getElementById("city").textContent = result.city;
+        // document.getElementById("subdivision").textContent = result.principalSubdivision;
         document.getElementById("country").textContent = result.countryName;
         document.getElementById("continent").textContent = result.continent;
+
+        console.log(result.localityInfo.informative[0].description);
+        // console.log(result.localityInfo.informative[1].description);
     });
 
     /* You can also set the locality language as needed */
@@ -70,6 +90,9 @@ async function getISS() {
     // reverseGeocoder.getClientCoordinates(function (result) {
     //     console.log(result);
     // });
+
+
+
 
     marker.setLatLng([latitude, longitude]);
 
