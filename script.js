@@ -7,21 +7,17 @@ const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const tiles = L.tileLayer(tileUrl, { attribution });
 tiles.addTo(mymap);
 
-var issIcon = L.icon({
+const issIcon = L.icon({
     iconUrl: 'iss200.png',
     iconSize: [50, 32],
     iconAnchor: [25, 16],
-    // popupAnchor: [-3, -76],
-    // shadowUrl: 'my-icon-shadow.png',
-    // shadowSize: [68, 95],
-    // shadowAnchor: [22, 94]
 });
 
 // Making a marker with a custom icon
 const marker = L.marker([0, 0], { icon: issIcon }).addTo(mymap);
 
 // Get and update data from API
-const api_url = "https://api.wheretheiss.at/v1/satellites/25544"
+const api_url = "https://api.wheretheiss.at/v1/satellites/25544";
 
 let firstTime = true;
 
@@ -31,22 +27,21 @@ async function getISS() {
     const { latitude, longitude, velocity, altitude, timestamp } = data;
 
     marker.setLatLng([latitude, longitude]);
+    mymap.setView(marker.getLatLng());
 
     if (firstTime) {
         mymap.setView([latitude, longitude], 4);
         firstTime = false;
     }
 
-    let formatTime = new Date(timestamp * 1000);
-
     document.getElementById('lat').textContent = latitude;
     document.getElementById('long').textContent = longitude;
-    document.getElementById('velocity').textContent = (velocity / 1.609344).toFixed(2);
+    document.getElementById('velocity').textContent = (velocity / 1.609344).toLocaleString('en-US', { maximumFractionDigits: 2 });
     document.getElementById('altitude').textContent = (altitude / 1.609344).toFixed(2);
-    document.getElementById('timestamp').textContent = formatTime.toLocaleTimeString();
 
-    // console.log("Latitude:", latitude);
-    // console.log("Longitude:", longitude);
+    let formatTime = new Date(timestamp * 1000);
+    document.getElementById('timestamp').textContent = formatTime.toLocaleTimeString(('en-US'));
+    document.getElementById('date').textContent = formatTime.toLocaleDateString(('en-US'));
 }
 getISS();
 
