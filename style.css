@@ -4,14 +4,30 @@
 
 body{
     background-color: #f7f7f7;
-    min-height: 100vh;
+    background-image: url(earth.jpg);
+    background-repeat: no-repeat;
+    background-position: 0, 0;
+    background-size: cover;
+    /* min-height: 100vh; */
     margin: 10px;
+}
+
+.header-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin: 0px auto;
+    /* flex-flow: row wrap; */
+    text-align: center;
+    width:500px;
 }
 
 #title {
     display: flex;
     align-items: center;
     justify-content: center;
+    /* margin-top: 100px; */
 }
 
 #time-date {
@@ -22,7 +38,17 @@ body{
 }
 
 .time-date {
+    margin-top: 10px;
     padding: 0px 10px;
+}
+
+.controls {
+    margin-top: 20px;
+
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: center;
 }
 
 .data-container{
@@ -34,8 +60,8 @@ body{
 
 .col {
     padding: 20px;
-    /* width: 500px; */
     width: auto;
+    /* width: 331.5px; */
     background-color: white;
     border: 1px solid black;
     margin: 20px;
@@ -44,7 +70,7 @@ body{
 
 .row > * {
     padding: 30px 50px;
-    white-space: nowrap;
+    /* white-space: nowrap; */
 }
 
 .table-title {
@@ -69,7 +95,7 @@ body{
 
 #issMap {
     height: 500px;
-    width: 1065px;
+    width: 1073px;
     margin: 20px 40px;
     border: 1px solid black;
     border-radius: 5px;

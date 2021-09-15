@@ -2,11 +2,8 @@
 const mymap = L.map('issMap', { minZoom: 1 }).setView([60, 0], 1);
 
 // mymap.setMaxBounds(
-//     [
-//         [84.67351256610522, -174.0234375],
-//         [-58.995311187950925, 223.2421875]
-//     ]
-// );
+//     [[84.67351256610522, -174.0234375],
+//     [-58.995311187950925, 223.2421875]]);
 
 const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
@@ -67,12 +64,17 @@ async function getISS() {
         // document.getElementById("locality-info").textContent = result.localityInfo.informative[0].description;
         // document.getElementById("city").textContent = result.city;
         document.getElementById("subdivision").textContent = result.principalSubdivision;
-        console.log(result.principalSubdivision);
-        // if (Object.keys(result.principalSubdivision).length === 0) {
-        //     document.getElementById("subdivision").textContent = "Loading..."
-        // }
+        if (Object.keys(result.principalSubdivision).length === 0) {
+            document.getElementById("subdivision").textContent = "Waiting..."
+        }
         document.getElementById("country").textContent = result.countryName;
+        if (Object.keys(result.countryName).length === 0) {
+            document.getElementById("country").textContent = "Waiting..."
+        }
         document.getElementById("continent").textContent = result.continent;
+        if (Object.keys(result.continent).length === 0) {
+            document.getElementById("continent").textContent = "Waiting..."
+        }
 
         // console.log(result.localityInfo.informative[0].description);
         // console.log(result.localityInfo.informative[1].description);
@@ -97,7 +99,7 @@ async function getISS() {
     mymap.panTo(marker.getLatLng());
 
     if (initializeView) {
-        mymap.setView([latitude, longitude], 2);
+        mymap.setView([latitude, longitude], 3);
         initializeView = false;
     }
 

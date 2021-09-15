@@ -20,13 +20,28 @@
 </head>
 
 <body>
-    <h1 id="title">Where is the ISS?</h1>
-    <div id="time-date">
-        <div class="time-date">
-            <strong>Time:</strong> <span id="timestamp"></span> EST
+    <div class="header-container">
+        <h1 id="title">Where is the ISS?</h1>
+        <div id="time-date">
+            <div class="time-date">
+                <strong>Time:</strong> <span id="timestamp"></span> EST
+            </div>
+            <div class="time-date">
+                <strong>Date:</strong> <span id="date"></span>
+            </div>
         </div>
-        <div class="time-date">
-            <strong>Date:</strong> <span id="date"></span>
+        <div class="controls">
+            <div class="btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                    <input type="checkbox" checked autocomplete="off"> Center ISS
+                </label>
+                <label class="btn btn-secondary active">
+                    <input type="checkbox" checked autocomplete="off"> Pause Updates
+                </label>
+                <label class="btn btn-secondary active">
+                    <input type="checkbox" checked autocomplete="off"> Remove Radius
+                </label>
+            </div>
         </div>
     </div>
 
