@@ -32,9 +32,32 @@ body{
     justify-content: center;
 }
 
+.col {
+    padding: 20px;
+    /* width: 500px; */
+    width: auto;
+    background-color: white;
+    border: 1px solid black;
+    margin: 20px;
+    border-radius: 5px;
+}
+
 .row > * {
     padding: 30px 50px;
     white-space: nowrap;
+}
+
+.table-title {
+    text-align: center;
+    font-weight: bold;
+}
+
+/* .table-top {
+    border-top: none;
+} */
+
+#table1Div {
+    text-align: center;
 }
 
 .map-container {
@@ -45,6 +68,9 @@ body{
 }
 
 #issMap {
-    height: 350px;
-    width: 500px;
+    height: 500px;
+    width: 1065px;
+    margin: 20px 40px;
+    border: 1px solid black;
+    border-radius: 5px;
 }

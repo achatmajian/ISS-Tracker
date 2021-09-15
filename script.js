@@ -67,6 +67,10 @@ async function getISS() {
         // document.getElementById("locality-info").textContent = result.localityInfo.informative[0].description;
         // document.getElementById("city").textContent = result.city;
         document.getElementById("subdivision").textContent = result.principalSubdivision;
+        console.log(result.principalSubdivision);
+        // if (Object.keys(result.principalSubdivision).length === 0) {
+        //     document.getElementById("subdivision").textContent = "Loading..."
+        // }
         document.getElementById("country").textContent = result.countryName;
         document.getElementById("continent").textContent = result.continent;
 
@@ -115,18 +119,55 @@ getISS();
 
 // setInterval(getISS, 1000);
 
-async function getAstronauts() {
+// async function getAstronauts() {
+//     const peopleResponse = await fetch("http://api.open-notify.org/astros.json");
+//     const peopleData = await peopleResponse.json();
+//     const { people } = peopleData;
+//     for (let i = 0; i < people.length; i++) {
+//         if (people[i].craft === "ISS") {
+//             // console.log(people[i].name);
+//             let node = document.createElement("li");
+//             let textnode = document.createTextNode(people[i].name);
+//             node.appendChild(textnode);
+//             document.getElementById("astronauts").appendChild(node);
+//         }
+//     }
+// }
+// getAstronauts();
+
+async function getAstronautsTable() {
     const peopleResponse = await fetch("http://api.open-notify.org/astros.json");
     const peopleData = await peopleResponse.json();
     const { people } = peopleData;
     for (let i = 0; i < people.length; i++) {
         if (people[i].craft === "ISS") {
-            // console.log(people[i].name);
-            let node = document.createElement("li");
-            let textnode = document.createTextNode(people[i].name);
-            node.appendChild(textnode);
-            document.getElementById("astronauts").appendChild(node);
+
+            // get the reference for the body
+            var table1 = document.getElementById('table1Div');
+
+            // get reference for <table> element
+            var tbl = document.getElementById("table1");
+
+            // creating rows
+            for (var r = 0; r < people.length; r++) {
+                var row = document.createElement("tr");
+
+                // create cells in row
+                for (var c = 0; c < 1; c++) {
+                    var cell = document.createElement("td");
+                    var cellText = document.createElement('span');
+                    cellText.innerText = people[i].name;
+                    cell.appendChild(cellText);
+                    row.appendChild(cell);
+                    console.log(people[i].name);
+                }
+            }
+
         }
+
+        tbl.appendChild(row); // add the row to the end of the table body
     }
+
+    table1.appendChild(tbl); // appends <table> into <div>
 }
-getAstronauts();
+getAstronautsTable();
