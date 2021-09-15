@@ -1,4 +1,50 @@
+* {
+    box-sizing: border-box;
+  }
+
+body{
+    background-color: #f7f7f7;
+    min-height: 100vh;
+    margin: 10px;
+}
+
+#title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#time-date {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-date {
+    padding: 0px 10px;
+}
+
+.data-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.row > * {
+    padding: 30px 50px;
+    white-space: nowrap;
+}
+
+.map-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
 #issMap {
     height: 350px;
-    width: 600px;
+    width: 500px;
 }
