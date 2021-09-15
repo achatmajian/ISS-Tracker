@@ -46,16 +46,16 @@ async function getISS() {
 
     const peopleResponse = await fetch("http://api.open-notify.org/astros.json");
     const peopleData = await peopleResponse.json();
-    const { people, name, craft } = peopleData;
-    console.log(people[0].name);
-    console.log(people[0].craft);
-    console.log(name);
-    console.log(craft);
-    // if (people.craft === "ISS") {
-    //     console.log(people);
-    // }
-
-
+    const { people } = peopleData;
+    for (let i = 0; i < people.length; i++) {
+        if (people[i].craft === "ISS") {
+            // console.log(people[i].name);
+            let node = document.createElement("li");
+            let textnode = document.createTextNode(people[i].name);
+            node.appendChild(textnode);
+            document.getElementById("astronauts").appendChild(node);
+        }
+    }
 
     /* Initialise Reverse Geocode API Client */
     var reverseGeocoder = new BDCReverseGeocode();
