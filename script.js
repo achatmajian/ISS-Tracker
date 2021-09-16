@@ -1,5 +1,5 @@
 // Making a map and tiles
-const mymap = L.map('issMap', { minZoom: 1 }).setView([60, 0], 1);
+const mymap = L.map('issMap', { minZoom: 1 }).setView([0, 0], 1);
 
 // mymap.setMaxBounds(
 //     [[84.67351256610522, -174.0234375],
@@ -40,6 +40,7 @@ const circle = L.circle([0, 0]).addTo(mymap);
 const api_url = "https://api.wheretheiss.at/v1/satellites/25544";
 
 let initializeView = true;
+let centeredISS = true;
 
 async function getISS() {
     const response = await fetch(api_url);
@@ -94,9 +95,50 @@ async function getISS() {
     // L.circleMarker([latitude, longitude], 1000).addTo(mymap);
     // console.log(getLatLng());
 
+
     // Center ISS icon on map
-    mymap.setView(marker.getLatLng());
-    mymap.panTo(marker.getLatLng());
+    // mymap.setView(marker.getLatLng());
+    // mymap.panTo(marker.getLatLng());
+
+    // mymap.setView([0, 0]);
+    // mymap.panTo([0, 0]);
+
+    // centerIss = function (centerToggle) {
+    //     if (centerToggle.checked) {
+    //         alert("ISS is centered");
+    //         setInterval(function () {
+    //             mymap.setView(marker.getLatLng());
+    //             mymap.panTo(marker.getLatLng());
+    //         }, 1000);
+    //     } else {
+    //         alert("ISS is not centered");
+    //         mymap.setView([0, 0]);
+    //         mymap.panTo([0, 0]);
+    //     }
+    // };
+
+    // if (initializeCentered) {
+    //     mymap.setView(marker.getLatLng());
+    //     mymap.panTo(marker.getLatLng());
+    // };
+
+    if (centeredISS) {
+        mymap.setView(marker.getLatLng());
+        mymap.panTo(marker.getLatLng());
+    } else if (centeredISS === false) {
+        mymap.setView(marker);
+        mymap.panTo(marker);
+    }
+
+    centerIss = function (centerToggle) {
+        if (centerToggle.checked) {
+            alert("ISS is centered");
+            centeredISS = true;
+        } else {
+            alert("ISS is not centered");
+            centeredISS = false;
+        }
+    };
 
     if (initializeView) {
         mymap.setView([latitude, longitude], 3);
