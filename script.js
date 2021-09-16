@@ -92,10 +92,10 @@ async function getISS() {
 
         radiusControl = function (radiusToggle) {
             if (radiusToggle.checked) {
-                alert("Radius is on");
+                console.log("Radius is on");
                 circle.setRadius(footprint * 1000);
             } else {
-                alert("Radius is off");
+                console.log("Radius is off");
                 circle.setRadius(footprint * 0)
             }
         };
@@ -113,10 +113,10 @@ async function getISS() {
 
     centerIss = function (centerToggle) {
         if (centerToggle.checked) {
-            alert("ISS is centered");
+            console.log("ISS is centered");
             centeredISS = true;
         } else {
-            alert("ISS is not centered");
+            console.log("ISS is not centered");
             centeredISS = false;
         }
     };
@@ -141,7 +141,7 @@ async function getISS() {
 
     unitConvert = function (unitToggle) {
         if (unitToggle.checked) {
-            alert("Units are in imperial");
+            console.log("Units are in imperial");
             miles = true;
 
             document.getElementById('velocity').textContent = (velocity / 1.609344).toLocaleString('en-US', { maximumFractionDigits: 2 });
@@ -153,7 +153,7 @@ async function getISS() {
             document.getElementById('footprint').textContent = (footprint / 1.609344).toFixed(2);
             document.getElementById("footprint-unit").textContent = "miles";
         } else {
-            alert("Units are in metric");
+            console.log("Units are in metric");
             miles = false;
 
             document.getElementById('velocity').textContent = velocity.toLocaleString('en-US', { maximumFractionDigits: 3 });
@@ -176,27 +176,30 @@ async function getISS() {
 
 }
 
-getISS();
-// setInterval(getISS, 1000);
+// getISS();
 
-// let goLive = setInterval(getISS, 1000);
+function getLiveData() {
+    let initializeLive = true;
+    let goLive = setInterval(getISS, 1000);
 
-// if (live) {
-//     getISS(goLive);
-// } else if (live === false) {
-//     getISS();
-//     clearInterval(goLive);
-// }
+    if (initializeLive) {
+        goLive;
+        initializeLive = false;
+    }
 
-// liveUpdate = function (updateToggle) {
-//     if (updateToggle.checked) {
-//         live = true;
-//         alert("Live updates on");
-//     } else {
-//         live = false;
-//         alert("Live updates off");
-//     }
-// };
+    liveUpdate = function (liveToggle) {
+        if (liveToggle.checked) {
+            console.log("Live update is on");
+            initializeLive = true;
+            goLive = setInterval(getISS, 1000);
+        } else {
+            console.log("Live update is off");
+            initializeLive = false;
+            clearInterval(goLive);
+        }
+    };
+};
+getLiveData();
 
 async function getAstronautsTable() {
     const peopleResponse = await fetch("http://api.open-notify.org/astros.json");
