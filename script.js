@@ -31,25 +31,24 @@ const issIcon = L.icon({
     iconAnchor: [25, 16],
 });
 
+// Initialize variables
+let initializeView = true;
+let centeredISS = true;
+let live = true;
+let initializeRadius = true;
+
 // Making a marker with a custom icon
 const marker = L.marker([0, 0], { icon: issIcon }).addTo(mymap);
-const circle = L.circle([0, 0]).addTo(mymap);
-
+let circle = L.circle([0, 0], { color: '#C02900', weight: 0, opacity: 1, fillColor: '#C02900', fillOpacity: .25 }).addTo(mymap);
 
 // Get and update data from API
 const api_url = "https://api.wheretheiss.at/v1/satellites/25544";
 
-let initializeView = true;
-let centeredISS = true;
 
 async function getISS() {
     const response = await fetch(api_url);
     const data = await response.json();
     const { latitude, longitude, velocity, altitude, timestamp, visibility, footprint, units } = data;
-    // console.log(footprint);
-
-    // console.log(Date.now() / 1000);
-    // console.log(timestamp);
 
     /* Initialise Reverse Geocode API Client */
     var reverseGeocoder = new BDCReverseGeocode();
@@ -62,8 +61,6 @@ async function getISS() {
     }, function (result) {
         console.log(result);
         document.getElementById("locality").textContent = result.locality;
-        // document.getElementById("locality-info").textContent = result.localityInfo.informative[0].description;
-        // document.getElementById("city").textContent = result.city;
         document.getElementById("subdivision").textContent = result.principalSubdivision;
         if (Object.keys(result.principalSubdivision).length === 0) {
             document.getElementById("subdivision").textContent = "Waiting..."
@@ -76,52 +73,40 @@ async function getISS() {
         if (Object.keys(result.continent).length === 0) {
             document.getElementById("continent").textContent = "Waiting..."
         }
-
-        // console.log(result.localityInfo.informative[0].description);
-        // console.log(result.localityInfo.informative[1].description);
     });
 
-    /* You can also set the locality language as needed */
-    // reverseGeocoder.localityLanguage = 'en';
-
-
+    // Set marker and circle location
     marker.setLatLng([latitude, longitude]);
     circle.setLatLng([latitude, longitude]);
-    circle.setRadius(footprint * 1000);
-    // Circle radius default is in meters, footprint
+    // circle.setRadius(footprint * 1000);
+
+
+    function radius() {
+        // Circle radius default is in meters, footprint value is in kilometers
+        // circle.setRadius(footprint * 1000);
+
+        if (initializeRadius) {
+            circle.setRadius(footprint * 1000);
+            initializeRadius = false;
+        }
+
+        radiusControl = function (radiusToggle) {
+            if (radiusToggle.checked) {
+                alert("Radius is on");
+                circle.setRadius(footprint * 1000);
+            } else {
+                alert("Radius is off");
+                circle.setRadius(footprint * 0)
+            }
+        };
+    };
+    radius();
 
 
 
-    // L.circleMarker([latitude, longitude], 1000).addTo(mymap);
-    // console.log(getLatLng());
 
 
-    // Center ISS icon on map
-    // mymap.setView(marker.getLatLng());
-    // mymap.panTo(marker.getLatLng());
-
-    // mymap.setView([0, 0]);
-    // mymap.panTo([0, 0]);
-
-    // centerIss = function (centerToggle) {
-    //     if (centerToggle.checked) {
-    //         alert("ISS is centered");
-    //         setInterval(function () {
-    //             mymap.setView(marker.getLatLng());
-    //             mymap.panTo(marker.getLatLng());
-    //         }, 1000);
-    //     } else {
-    //         alert("ISS is not centered");
-    //         mymap.setView([0, 0]);
-    //         mymap.panTo([0, 0]);
-    //     }
-    // };
-
-    // if (initializeCentered) {
-    //     mymap.setView(marker.getLatLng());
-    //     mymap.panTo(marker.getLatLng());
-    // };
-
+    // Center ISS
     if (centeredISS) {
         mymap.setView(marker.getLatLng());
         mymap.panTo(marker.getLatLng());
@@ -140,6 +125,7 @@ async function getISS() {
         }
     };
 
+    // Initialize map view
     if (initializeView) {
         mymap.setView([latitude, longitude], 3);
         initializeView = false;
@@ -159,25 +145,28 @@ async function getISS() {
     document.getElementById('date').textContent = formatTime.toLocaleDateString(('en-US'));
 
 }
-getISS();
 
+getISS();
 // setInterval(getISS, 1000);
 
-// async function getAstronauts() {
-//     const peopleResponse = await fetch("http://api.open-notify.org/astros.json");
-//     const peopleData = await peopleResponse.json();
-//     const { people } = peopleData;
-//     for (let i = 0; i < people.length; i++) {
-//         if (people[i].craft === "ISS") {
-//             // console.log(people[i].name);
-//             let node = document.createElement("li");
-//             let textnode = document.createTextNode(people[i].name);
-//             node.appendChild(textnode);
-//             document.getElementById("astronauts").appendChild(node);
-//         }
-//     }
+// let goLive = setInterval(getISS, 1000);
+
+// if (live) {
+//     getISS(goLive);
+// } else if (live === false) {
+//     getISS();
+//     clearInterval(goLive);
 // }
-// getAstronauts();
+
+// liveUpdate = function (updateToggle) {
+//     if (updateToggle.checked) {
+//         live = true;
+//         alert("Live updates on");
+//     } else {
+//         live = false;
+//         alert("Live updates off");
+//     }
+// };
 
 async function getAstronautsTable() {
     const peopleResponse = await fetch("http://api.open-notify.org/astros.json");

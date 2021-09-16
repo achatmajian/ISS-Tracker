@@ -43,14 +43,16 @@
                     <label class="form-check-label" for="flexSwitchCheckChecked">Center ISS</label>
                 </div>
                 <div class="form-check form-switch" id="live-update">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
+                        onClick="liveUpdate(this);">
                     <label class="form-check-label" for="flexSwitchCheckChecked">Live Update</label>
                 </div>
             </div>
 
             <div id="controls-bottom">
                 <div class="form-check form-switch" id="show-radius">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
+                        onClick="radiusControl(this);">
                     <label class="form-check-label" for="flexSwitchCheckChecked">Show Radius</label>
                 </div>
                 <div class="form-check form-switch" id="toggle-units">
