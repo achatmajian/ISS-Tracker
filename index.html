@@ -56,8 +56,9 @@
                     <label class="form-check-label" for="flexSwitchCheckChecked">Show Radius</label>
                 </div>
                 <div class="form-check form-switch" id="toggle-units">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                    <label class="form-check-label" for="flexSwitchCheckChecked">Toggle Units</label>
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
+                        onClick="unitConvert(this);">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Change Units</label>
                 </div>
             </div>
         </div>
@@ -83,15 +84,15 @@
                         </tr>
                         <tr>
                             <th scope="row">Velocity:</th>
-                            <td><span id="velocity"></span> mph</span></td>
+                            <td><span id="velocity"></span> <span id="velocity-unit"></span></td>
                         </tr>
                         <tr>
                             <th scope="row">Altitude:</th>
-                            <td><span id="altitude"></span> miles</td>
+                            <td><span id="altitude"></span> <span id="altitude-unit"></span></td>
                         </tr>
                         <tr>
                             <th scope="row">Footprint:</th>
-                            <td><span id="footprint"></span> miles</td>
+                            <td><span id="footprint"></span> <span id="footprint-unit"></span></td>
                         </tr>
                         <tr>
                             <th scope="row">Visbility:</th>
