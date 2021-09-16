@@ -1,55 +1,92 @@
-// Making a map and tiles
+// Make map and tiles
 const mymap = L.map('issMap', { minZoom: 1 }).setView([0, 0], 1);
-
-// mymap.setMaxBounds(
-//     [[84.67351256610522, -174.0234375],
-//     [-58.995311187950925, 223.2421875]]);
-
 const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-
 const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const tiles = L.tileLayer(tileUrl, { attribution });
 tiles.addTo(mymap);
 
-// var t = L.terminator({ time: Date.now() });
-// t.addTo(mymap);
-// setInterval(function () { updateTerminator(t) }, 1000);
-// function updateTerminator(t) {
-//     t.setTime();
-// }
+// mymap.setMaxBounds([[84.67351256610522, -174.0234375],[-58.995311187950925, 223.2421875]]);
 
-var terminator = L.terminator().addTo(mymap);
-setInterval(function () {
-    terminator.setTime();
-}, 60000); // Every minute
-
-// L.terminator({ time: Date.now() }).addTo(mymap)
-
+// Create custom icon
 const issIcon = L.icon({
     iconUrl: 'iss200.png',
     iconSize: [50, 32],
     iconAnchor: [25, 16],
 });
 
-// Initialize variables
+// Create a marker with a custom icon
+const marker = L.marker([0, 0], { icon: issIcon }).addTo(mymap);
+const circle = L.circle([0, 0], { color: '#C02900', weight: 0, opacity: 1, fillColor: '#C02900', fillOpacity: .25 }).addTo(mymap);
+
+// Create and update solar terminator
+var terminator = L.terminator().addTo(mymap);
+setInterval(function () {
+    terminator.setTime();
+}, 60000); // Every minute
+
+// Initialization variables
 let initializeView = true;
 let centeredISS = true;
-let live = true;
 let initializeRadius = true;
 let miles = true;
 
-// Making a marker with a custom icon
-const marker = L.marker([0, 0], { icon: issIcon }).addTo(mymap);
-let circle = L.circle([0, 0], { color: '#C02900', weight: 0, opacity: 1, fillColor: '#C02900', fillOpacity: .25 }).addTo(mymap);
-
 // Get and update data from API
-const api_url = "https://api.wheretheiss.at/v1/satellites/25544";
-
-
 async function getISS() {
-    const response = await fetch(api_url);
+    const response = await fetch("https://api.wheretheiss.at/v1/satellites/25544");
     const data = await response.json();
-    const { latitude, longitude, velocity, altitude, timestamp, visibility, footprint, units } = data;
+    const { latitude, longitude, velocity, altitude, timestamp, visibility, footprint } = data;
+
+    // Initialize map view
+    if (initializeView) {
+        mymap.setView([latitude, longitude], 3);
+        initializeView = false;
+    }
+
+    // Set marker and circle location
+    marker.setLatLng([latitude, longitude]);
+    circle.setLatLng([latitude, longitude]);
+
+    // Toggle radius
+    function radius() {
+        if (initializeRadius) {
+            circle.setRadius(footprint * 1000);
+            // Circle radius default is in meters, footprint value is in kilometers
+            initializeRadius = false;
+        }
+
+        radiusControl = function (radiusToggle) {
+            if (radiusToggle.checked) {
+                console.log("Radius is on");
+                circle.setRadius(footprint * 1000);
+            } else {
+                console.log("Radius is off");
+                circle.setRadius(footprint * 0)
+            }
+        };
+    };
+    radius();
+
+    // Toggle icon centered on map
+    function getCenter() {
+        if (centeredISS) {
+            mymap.setView(marker.getLatLng());
+            mymap.panTo(marker.getLatLng());
+        } else if (centeredISS === false) {
+            mymap.setView(marker);
+            mymap.panTo(marker);
+        }
+
+        centerIss = function (centerToggle) {
+            if (centerToggle.checked) {
+                console.log("ISS is centered");
+                centeredISS = true;
+            } else {
+                console.log("ISS is not centered");
+                centeredISS = false;
+            }
+        };
+    }
+    getCenter();
 
     /* Initialise Reverse Geocode API Client */
     var reverseGeocoder = new BDCReverseGeocode();
@@ -76,57 +113,7 @@ async function getISS() {
         }
     });
 
-    // Set marker and circle location
-    marker.setLatLng([latitude, longitude]);
-    circle.setLatLng([latitude, longitude]);
-    // circle.setRadius(footprint * 1000);
-
-    function radius() {
-        // Circle radius default is in meters, footprint value is in kilometers
-        // circle.setRadius(footprint * 1000);
-
-        if (initializeRadius) {
-            circle.setRadius(footprint * 1000);
-            initializeRadius = false;
-        }
-
-        radiusControl = function (radiusToggle) {
-            if (radiusToggle.checked) {
-                console.log("Radius is on");
-                circle.setRadius(footprint * 1000);
-            } else {
-                console.log("Radius is off");
-                circle.setRadius(footprint * 0)
-            }
-        };
-    };
-    radius();
-
-    // Center ISS
-    if (centeredISS) {
-        mymap.setView(marker.getLatLng());
-        mymap.panTo(marker.getLatLng());
-    } else if (centeredISS === false) {
-        mymap.setView(marker);
-        mymap.panTo(marker);
-    }
-
-    centerIss = function (centerToggle) {
-        if (centerToggle.checked) {
-            console.log("ISS is centered");
-            centeredISS = true;
-        } else {
-            console.log("ISS is not centered");
-            centeredISS = false;
-        }
-    };
-
-    // Initialize map view
-    if (initializeView) {
-        mymap.setView([latitude, longitude], 3);
-        initializeView = false;
-    }
-
+    // Show data values
     document.getElementById('lat').textContent = latitude;
     document.getElementById('long').textContent = longitude;
 
@@ -139,6 +126,7 @@ async function getISS() {
     document.getElementById('footprint').textContent = (footprint / 1.609344).toFixed(2);
     document.getElementById("footprint-unit").textContent = "Miles";
 
+    // Toggle unit conversion
     unitConvert = function (unitToggle) {
         if (unitToggle.checked) {
             console.log("Units are in imperial");
@@ -176,8 +164,7 @@ async function getISS() {
 
 }
 
-// getISS();
-
+// Toggle live data updates
 function getLiveData() {
     let initializeLive = true;
     let goLive = setInterval(getISS, 1000);
@@ -201,6 +188,7 @@ function getLiveData() {
 };
 getLiveData();
 
+// Show astronauts from array in table
 async function getAstronautsTable() {
     const peopleResponse = await fetch("http://api.open-notify.org/astros.json");
     const peopleData = await peopleResponse.json();
@@ -228,12 +216,9 @@ async function getAstronautsTable() {
                     console.log(people[i].name);
                 }
             }
-
         }
-
         tbl.appendChild(row); // add the row to the end of the table body
     }
-
     table1.appendChild(tbl); // appends <table> into <div>
 }
 getAstronautsTable();
