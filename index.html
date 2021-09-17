@@ -25,118 +25,151 @@
 </head>
 
 <body>
-    <div class="header-container">
-        <h1 id="title">Where is the ISS?</h1>
-        <div id="time-date">
-            <div class="time-date">
-                <strong>Time:</strong> <span id="timestamp"></span> EST
-            </div>
-            <div class="time-date">
-                <strong>Date:</strong> <span id="date"></span>
-            </div>
-        </div>
-        <div class="controls">
-            <div id="controls-top">
-                <div class="form-check form-switch" id="center-iss">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
-                        onClick="centerIss(this);">
-                    <label class="form-check-label" for="flexSwitchCheckChecked">Center ISS</label>
-                </div>
-                <div class="form-check form-switch" id="live-update">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
-                        onClick="liveUpdate(this);">
-                    <label class="form-check-label" for="flexSwitchCheckChecked">Live Update</label>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="left-container">
+                <h1 id="title">Where is the ISS?</h1>
+                <div id="time-date">
+                    <div class="time-date">
+                        <strong>Time:</strong> <span id="timestamp"></span> EST
+                    </div>
+                    <div class="time-date">
+                        <strong>Date:</strong> <span id="date"></span>
+                    </div>
                 </div>
             </div>
 
-            <div id="controls-bottom">
-                <div class="form-check form-switch" id="show-radius">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
-                        onClick="radiusControl(this);">
-                    <label class="form-check-label" for="flexSwitchCheckChecked">Show Radius</label>
+            <div class="right-container">
+                <div class="controls">
+                    <div id="controls-top">
+                        <div class="form-check form-switch" id="center-iss">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
+                                onClick="centerIss(this);">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Center ISS</label>
+                        </div>
+                        <div class="form-check form-switch" id="live-update">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
+                                onClick="liveUpdate(this);">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Live Update</label>
+                        </div>
+                    </div>
+
+                    <div id="controls-bottom">
+                        <div class="form-check form-switch" id="show-radius">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
+                                onClick="radiusControl(this);">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Show Radius</label>
+                        </div>
+                        <div class="form-check form-switch" id="toggle-units">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
+                                onClick="unitConvert(this);">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Change Units</label>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-check form-switch" id="toggle-units">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked
-                        onClick="unitConvert(this);">
-                    <label class="form-check-label" for="flexSwitchCheckChecked">Change Units</label>
+            </div>
+
+        </div>
+    </nav>
+
+
+
+    <div class="content-container">
+
+        <div class="map-container">
+            <div id="issMap"></div>
+        </div>
+
+        <div class="data-container-2">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="vessel-tab" data-bs-toggle="tab" data-bs-target="#vessel"
+                        type="button" role="tab" aria-controls="vessel" aria-selected="true">Vessel Data</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="location-tab" data-bs-toggle="tab" data-bs-target="#location"
+                        type="button" role="tab" aria-controls="location" aria-selected="false">Location
+                        Data</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="astronauts-tab" data-bs-toggle="tab" data-bs-target="#astronauts"
+                        type="button" role="tab" aria-controls="astronauts" aria-selected="false">Astronauts on
+                        Board</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="vessel" role="tabpanel" aria-labelledby="vessel-tab">
+                    <table class="table">
+                        <!-- <p class="table-title">Vessel Data</p> -->
+                        <tbody>
+                            <tr>
+                                <th scope="row">Latitude:</th>
+                                <td><span id="lat"></span>°</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Longitude:</th>
+                                <td><span id="long"></span>°</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Velocity:</th>
+                                <td><span id="velocity"></span> <span id="velocity-unit"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Altitude:</th>
+                                <td><span id="altitude"></span> <span id="altitude-unit"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Footprint:</th>
+                                <td><span id="footprint"></span> <span id="footprint-unit"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Visbility:</th>
+                                <td><span id="visibility" style="text-transform: capitalize"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">
+                    <table class="table">
+                        <!-- <p class="table-title">Location Data</p> -->
+                        <tbody>
+                            <tr>
+                                <th scope="row">Locality:</th>
+                                <td><span id="locality"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Subdivision:</th>
+                                <td><span id="subdivision"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Country:</th>
+                                <td><span id="country"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Continent:</th>
+                                <td><span id="continent"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="astronauts" role="tabpanel" aria-labelledby="astronauts-tab">
+                    <div id="table1Div">
+                        <!-- <p class="table-title">Astronauts</p> -->
+                        <table id="table1" class="table">
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="map-container">
-        <div id="issMap"></div>
-    </div>
 
-    <div class="data-container">
-        <div class="row justify-content-center">
-            <div class="col">
-                <table class="table">
-                    <p class="table-title">Vessel Data</p>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Latitude:</th>
-                            <td><span id="lat"></span>°</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Longitude:</th>
-                            <td><span id="long"></span>°</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Velocity:</th>
-                            <td><span id="velocity"></span> <span id="velocity-unit"></span></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Altitude:</th>
-                            <td><span id="altitude"></span> <span id="altitude-unit"></span></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Footprint:</th>
-                            <td><span id="footprint"></span> <span id="footprint-unit"></span></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Visbility:</th>
-                            <td><span id="visibility" style="text-transform: capitalize"></span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col">
-                <table class="table">
-                    <p class="table-title">Location Data</p>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Locality:</th>
-                            <td><span id="locality"></span></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Subdivision:</th>
-                            <td><span id="subdivision"></span></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Country:</th>
-                            <td><span id="country"></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Continent:</th>
-                            <td><span id="continent"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- Locality Info: <span id="locality-info" style="text-transform: capitalize"></span>
-                    <br> -->
-                <!-- Nearest City: <span id="city"></span>
-                    <br> -->
-            </div>
-            <div id="table1Div" class="col">
-                <p class="table-title">Astronauts on Board</p>
-                <table id="table1" class="table">
-                </table>
-            </div>
-            <!-- <span id="astro-container"></span> -->
-            <!-- Astronauts on Board: <span id="astronauts"></span> -->
-        </div>
-    </div>
+
+
+
+
+
+
 
 
 
