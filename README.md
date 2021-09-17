@@ -20,6 +20,6 @@ This application was built using:
 ## Data Used
 
 Data for this project was from multiple APIs:
-- Vessel Data: [Where The ISS At?](https://wheretheiss.at/w/developer).
-- Location Data: [Big Data Cloud's Reverse Geocode with Timzone](https://www.bigdatacloud.com/geocoding-apis/reverse-geocode-with-timezone).
-- Astronaut Data: [Open Notify's People In Space](http://open-notify.org/Open-Notify-API/People-In-Space/).
+- Vessel Data: [Where The ISS At?](https://wheretheiss.at/w/developer)
+- Location Data: [Big Data Cloud's Reverse Geocode with Timzone](https://www.bigdatacloud.com/geocoding-apis/reverse-geocode-with-timezone)
+- Astronaut Data: [Open Notify's People In Space](http://open-notify.org/Open-Notify-API/People-In-Space/)
