@@ -190,7 +190,7 @@ getLiveData();
 
 // Show astronauts from array in table
 async function getAstronautsTable() {
-    const peopleResponse = await fetch("http://api.open-notify.org/astros.json");
+    const peopleResponse = await fetch("https://api.open-notify.org/astros.json");
     const peopleData = await peopleResponse.json();
     const { people } = peopleData;
     for (let i = 0; i < people.length; i++) {
