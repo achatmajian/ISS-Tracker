@@ -187,38 +187,3 @@ function getLiveData() {
     };
 };
 getLiveData();
-
-// Show astronauts from array in table
-async function getAstronautsTable() {
-    const peopleResponse = await fetch("http://api.open-notify.org/astros.json");
-    const peopleData = await peopleResponse.json();
-    const { people } = peopleData;
-    for (let i = 0; i < people.length; i++) {
-        console.log(people[i].name);
-        if (people[i].craft === "ISS") {
-
-            // get the reference for the body
-            var table1 = document.getElementById('table1Div');
-
-            // get reference for <table> element
-            var tbl = document.getElementById("table1");
-
-            // creating rows
-            for (var r = 0; r < people.length; r++) {
-                var row = document.createElement("tr");
-
-                // create cells in row
-                for (var c = 0; c < 1; c++) {
-                    var cell = document.createElement("td");
-                    var cellText = document.createElement('span');
-                    cellText.innerText = people[i].name;
-                    cell.appendChild(cellText);
-                    row.appendChild(cell);
-                }
-            }
-        }
-        tbl.appendChild(row); // add the row to the end of the table body
-    }
-    table1.appendChild(tbl); // appends <table> into <div>
-}
-getAstronautsTable();
