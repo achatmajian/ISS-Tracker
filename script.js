@@ -34,7 +34,7 @@ let miles = true;
 async function getISS() {
     const response = await fetch("https://api.wheretheiss.at/v1/satellites/25544");
     const data = await response.json();
-    const { latitude, longitude, velocity, altitude, timestamp, visibility, footprint } = data;
+    const { latitude, longitude, velocity, altitude, timestamp, visibility, footprint, units } = data;
 
     // Initialize map view
     if (initializeView) {
@@ -88,6 +88,77 @@ async function getISS() {
     }
     getCenter();
 
+
+
+    // Show Initial data values
+    document.getElementById("lat").textContent = latitude;
+    document.getElementById("long").textContent = longitude;
+
+    if (miles === true) {
+        document.getElementById("velocity").textContent = (velocity / 1.609344).toLocaleString('en-US', { maximumFractionDigits: 2 });
+        document.getElementById("velocity-unit").textContent = "mph XXX";
+
+        document.getElementById("altitude").textContent = (altitude / 1.609344).toFixed(2);
+        document.getElementById("altitude-unit").textContent = "miles XXX";
+
+        document.getElementById("footprint").textContent = (footprint / 1.609344).toFixed(2);
+        document.getElementById("footprint-unit").textContent = "miles XXX";
+    } else if (miles === false) {
+        document.getElementById("velocity").textContent = velocity.toLocaleString('en-US', { maximumFractionDigits: 3 });
+        document.getElementById("velocity-unit").textContent = "km/h XXX";
+
+        document.getElementById("altitude").textContent = altitude.toFixed(2);
+        document.getElementById("altitude-unit").textContent = "kilometers XXX";
+
+
+        document.getElementById("footprint").textContent = footprint.toFixed(2);
+        document.getElementById("footprint-unit").textContent = "kilometers XXX";
+    }
+
+
+    // Toggle unit conversion
+    unitConvert = function (unitToggle) {
+        if (unitToggle.checked === true) {
+            console.log("Units are in imperial");
+            miles = true;
+
+            document.getElementById('velocity').textContent = (velocity / 1.609344).toLocaleString('en-US', { maximumFractionDigits: 2 });
+            document.getElementById("velocity-unit").textContent = "mph YYY";
+
+            document.getElementById('altitude').textContent = (altitude / 1.609344).toFixed(2);
+            document.getElementById("altitude-unit").textContent = "miles YYY";
+
+            document.getElementById('footprint').textContent = (footprint / 1.609344).toFixed(2);
+            document.getElementById("footprint-unit").textContent = "miles YYY";
+        } else if (unitToggle.checked === false) {
+            console.log("Units are in metric");
+            miles = false;
+
+            document.getElementById('velocity').textContent = velocity.toLocaleString('en-US', { maximumFractionDigits: 3 });
+            document.getElementById("velocity-unit").textContent = "km/h YYY";
+
+            document.getElementById('altitude').textContent = altitude.toFixed(2);
+            document.getElementById("altitude-unit").textContent = "kilometers YYY";
+
+
+            document.getElementById('footprint').textContent = footprint.toFixed(2);
+            document.getElementById("footprint-unit").textContent = "kilometers YYY";
+        }
+    };
+
+    document.getElementById('visibility').textContent = visibility;
+
+    let formatTime = new Date(timestamp * 1000);
+    document.getElementById('timestamp').textContent = formatTime.toLocaleTimeString(('en-US'));
+    document.getElementById('date').textContent = formatTime.toLocaleDateString(('en-US'));
+
+
+    // Reverse Geocode
+    const geoResponse = fetch(`https://pelias.github.io/compare/#/v1/reverse?layers=coarse&point.lat=${latitude}.lon=${longitude}`);
+    const geoData = geoResponse;
+    // const { properties, name } = geoData;
+    // console.log(JSON.stringify(geoData));
+
     /* Initialise Reverse Geocode API Client */
     var reverseGeocoder = new BDCReverseGeocode();
     reverseGeocoder.localityLanguage = 'en';
@@ -97,7 +168,7 @@ async function getISS() {
         latitude: latitude,
         longitude: longitude,
     }, function (result) {
-        console.log(result);
+        // console.log(result);
         document.getElementById("locality").textContent = result.locality;
         document.getElementById("subdivision").textContent = result.principalSubdivision;
         if (Object.keys(result.principalSubdivision).length === 0) {
@@ -112,56 +183,6 @@ async function getISS() {
             document.getElementById("continent").textContent = "Waiting..."
         }
     });
-
-    // Show data values
-    document.getElementById('lat').textContent = latitude;
-    document.getElementById('long').textContent = longitude;
-
-    document.getElementById('velocity').textContent = (velocity / 1.609344).toLocaleString('en-US', { maximumFractionDigits: 2 });
-    document.getElementById("velocity-unit").textContent = "MPH";
-
-    document.getElementById('altitude').textContent = (altitude / 1.609344).toFixed(2);
-    document.getElementById("altitude-unit").textContent = "Miles";
-
-    document.getElementById('footprint').textContent = (footprint / 1.609344).toFixed(2);
-    document.getElementById("footprint-unit").textContent = "Miles";
-
-    // Toggle unit conversion
-    unitConvert = function (unitToggle) {
-        if (unitToggle.checked) {
-            console.log("Units are in imperial");
-            miles = true;
-
-            document.getElementById('velocity').textContent = (velocity / 1.609344).toLocaleString('en-US', { maximumFractionDigits: 2 });
-            document.getElementById("velocity-unit").textContent = "mph";
-
-            document.getElementById('altitude').textContent = (altitude / 1.609344).toFixed(2);
-            document.getElementById("altitude-unit").textContent = "miles";
-
-            document.getElementById('footprint').textContent = (footprint / 1.609344).toFixed(2);
-            document.getElementById("footprint-unit").textContent = "miles";
-        } else {
-            console.log("Units are in metric");
-            miles = false;
-
-            document.getElementById('velocity').textContent = velocity.toLocaleString('en-US', { maximumFractionDigits: 3 });
-            document.getElementById("velocity-unit").textContent = "km/h";
-
-            document.getElementById('altitude').textContent = altitude.toFixed(2);
-            document.getElementById("altitude-unit").textContent = "kilometers";
-
-
-            document.getElementById('footprint').textContent = footprint.toFixed(2);
-            document.getElementById("footprint-unit").textContent = "kilometers";
-        }
-    };
-
-    document.getElementById('visibility').textContent = visibility;
-
-    let formatTime = new Date(timestamp * 1000);
-    document.getElementById('timestamp').textContent = formatTime.toLocaleTimeString(('en-US'));
-    document.getElementById('date').textContent = formatTime.toLocaleDateString(('en-US'));
-
 }
 
 // Toggle live data updates
