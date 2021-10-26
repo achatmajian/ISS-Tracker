@@ -1,7 +1,7 @@
 // Make map and tiles
-const mymap = L.map('issMap', { minZoom: 1 }).setView([0, 0], 1);
+const mymap = L.map("issMap", { minZoom: 1 }).setView([0, 0], 1);
 const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const tiles = L.tileLayer(tileUrl, { attribution });
 tiles.addTo(mymap);
 
@@ -9,17 +9,17 @@ tiles.addTo(mymap);
 
 // Create custom icon
 const issIcon = L.icon({
-    iconUrl: 'iss200.png',
+    iconUrl: "iss200.png",
     iconSize: [50, 32],
     iconAnchor: [25, 16],
 });
 
 // Create a marker with a custom icon
 const marker = L.marker([0, 0], { icon: issIcon }).addTo(mymap);
-const circle = L.circle([0, 0], { color: '#C02900', weight: 0, opacity: 1, fillColor: '#C02900', fillOpacity: .25 }).addTo(mymap);
+const circle = L.circle([0, 0], { color: "#C02900", weight: 0, opacity: 1, fillColor: "#C02900", fillOpacity: .25 }).addTo(mymap);
 
 // Create and update solar terminator
-var terminator = L.terminator().addTo(mymap);
+let terminator = L.terminator().addTo(mymap);
 setInterval(function () {
     terminator.setTime();
 }, 60000); // Every minute
@@ -88,33 +88,47 @@ async function getISS() {
     }
     getCenter();
 
+    // Miles Values
+    let mVelocity = (velocity / 1.609344).toLocaleString('en-US', { maximumFractionDigits: 2 });
+    let mAltitude = (altitude / 1.609344).toFixed(2);
+    let mFootprint = (footprint / 1.609344).toFixed(2);
 
+    // Kilometers Values
+    let kVelocity = velocity.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    let kAltitude = altitude.toFixed(2);
+    let kFootprint = footprint.toFixed(2);
 
-    // Show Initial data values
-    document.getElementById("lat").textContent = latitude;
-    document.getElementById("long").textContent = longitude;
+    // Time Value
+    let formatTime = new Date(timestamp * 1000);
+    let currentTime = formatTime.toLocaleTimeString(('en-US'));
+    let currentDate = formatTime.toLocaleDateString(('en-US'));
+
+    // Initial Lat & Long data values
+    $("#lat").html(latitude);
+    $("#long").html(longitude);
 
     if (miles === true) {
-        document.getElementById("velocity").textContent = (velocity / 1.609344).toLocaleString('en-US', { maximumFractionDigits: 2 });
-        document.getElementById("velocity-unit").textContent = "mph XXX";
+        // Initial miles data values
+        $("#velocity").html(mVelocity);
+        $("#velocity-unit").html("mph XXX");
 
-        document.getElementById("altitude").textContent = (altitude / 1.609344).toFixed(2);
-        document.getElementById("altitude-unit").textContent = "miles XXX";
+        $("#altitude").html(mAltitude);
+        $("#altitude-unit").html("miles XXX");
 
-        document.getElementById("footprint").textContent = (footprint / 1.609344).toFixed(2);
-        document.getElementById("footprint-unit").textContent = "miles XXX";
+        $("#footprint").html(mFootprint);
+        $("#footprint-unit").html("miles XXX");
+
     } else if (miles === false) {
-        document.getElementById("velocity").textContent = velocity.toLocaleString('en-US', { maximumFractionDigits: 3 });
-        document.getElementById("velocity-unit").textContent = "km/h XXX";
+        // Initial kilometers data values
+        $("#velocity").html(kVelocity);
+        $("#velocity-unit").html("kmh XXX");
 
-        document.getElementById("altitude").textContent = altitude.toFixed(2);
-        document.getElementById("altitude-unit").textContent = "kilometers XXX";
+        $("#altitude").html(kAltitude);
+        $("#altitude-unit").html("kilometers XXX");
 
-
-        document.getElementById("footprint").textContent = footprint.toFixed(2);
-        document.getElementById("footprint-unit").textContent = "kilometers XXX";
+        $("#footprint").html(kFootprint);
+        $("#footprint-unit").html("kilometers XXX");
     }
-
 
     // Toggle unit conversion
     unitConvert = function (unitToggle) {
@@ -122,35 +136,33 @@ async function getISS() {
             console.log("Units are in imperial");
             miles = true;
 
-            document.getElementById('velocity').textContent = (velocity / 1.609344).toLocaleString('en-US', { maximumFractionDigits: 2 });
-            document.getElementById("velocity-unit").textContent = "mph YYY";
+            $("#velocity").html(mVelocity);
+            $("#velocity-unit").html("mph YYY");
 
-            document.getElementById('altitude').textContent = (altitude / 1.609344).toFixed(2);
-            document.getElementById("altitude-unit").textContent = "miles YYY";
+            $("#altitude").html(mAltitude);
+            $("#altitude-unit").html("miles YYY");
 
-            document.getElementById('footprint').textContent = (footprint / 1.609344).toFixed(2);
-            document.getElementById("footprint-unit").textContent = "miles YYY";
+            $("#footprint").html(mFootprint);
+            $("#footprint-unit").html("miles YYY");
         } else if (unitToggle.checked === false) {
             console.log("Units are in metric");
             miles = false;
 
-            document.getElementById('velocity').textContent = velocity.toLocaleString('en-US', { maximumFractionDigits: 3 });
-            document.getElementById("velocity-unit").textContent = "km/h YYY";
+            $("#velocity").html(kVelocity);
+            $("#velocity-unit").html("kmh YYY");
 
-            document.getElementById('altitude').textContent = altitude.toFixed(2);
-            document.getElementById("altitude-unit").textContent = "kilometers YYY";
+            $("#altitude").html(kAltitude);
+            $("#altitude-unit").html("kilometers YYY");
 
-
-            document.getElementById('footprint').textContent = footprint.toFixed(2);
-            document.getElementById("footprint-unit").textContent = "kilometers YYY";
+            $("#footprint").html(kFootprint);
+            $("#footprint-unit").html("kilometers YYY");
         }
     };
 
-    document.getElementById('visibility').textContent = visibility;
-
-    let formatTime = new Date(timestamp * 1000);
-    document.getElementById('timestamp').textContent = formatTime.toLocaleTimeString(('en-US'));
-    document.getElementById('date').textContent = formatTime.toLocaleDateString(('en-US'));
+    // Time & Visitbility Data
+    $("#timestamp").html(currentTime);
+    $("#date").html(currentDate);
+    $("#visibility").html(visibility);
 
 
     // Reverse Geocode
@@ -169,18 +181,21 @@ async function getISS() {
         longitude: longitude,
     }, function (result) {
         // console.log(result);
-        document.getElementById("locality").textContent = result.locality;
-        document.getElementById("subdivision").textContent = result.principalSubdivision;
+        $("#locality").html(result.locality);
+
+        $("#subdivision").html(result.principalSubdivision);
         if (Object.keys(result.principalSubdivision).length === 0) {
-            document.getElementById("subdivision").textContent = "Waiting..."
+            $("#subdivision").html("Waiting...");
         }
-        document.getElementById("country").textContent = result.countryName;
+
+        $("#country").html(result.countryName);
         if (Object.keys(result.countryName).length === 0) {
-            document.getElementById("country").textContent = "Waiting..."
+            $("#country").html("Waiting...");
         }
-        document.getElementById("continent").textContent = result.continent;
+
+        $("#continent").html(result.continent);
         if (Object.keys(result.continent).length === 0) {
-            document.getElementById("continent").textContent = "Waiting..."
+            $("#continent").html("Waiting...");
         }
     });
 }
