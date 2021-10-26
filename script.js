@@ -46,48 +46,6 @@ async function getISS() {
     marker.setLatLng([latitude, longitude]);
     circle.setLatLng([latitude, longitude]);
 
-    // Toggle radius
-    function radius() {
-        if (initializeRadius) {
-            circle.setRadius(footprint * 1000);
-            // Circle radius default is in meters, footprint value is in kilometers
-            initializeRadius = false;
-        }
-
-        radiusControl = function (radiusToggle) {
-            if (radiusToggle.checked) {
-                console.log("Radius is on");
-                circle.setRadius(footprint * 1000);
-            } else {
-                console.log("Radius is off");
-                circle.setRadius(footprint * 0)
-            }
-        };
-    };
-    radius();
-
-    // Toggle icon centered on map
-    function getCenter() {
-        if (centeredISS) {
-            mymap.setView(marker.getLatLng());
-            mymap.panTo(marker.getLatLng());
-        } else if (centeredISS === false) {
-            mymap.setView(marker);
-            mymap.panTo(marker);
-        }
-
-        centerIss = function (centerToggle) {
-            if (centerToggle.checked) {
-                console.log("ISS is centered");
-                centeredISS = true;
-            } else {
-                console.log("ISS is not centered");
-                centeredISS = false;
-            }
-        };
-    }
-    getCenter();
-
     // Miles Values
     let mVelocity = (velocity / 1.609344).toLocaleString('en-US', { maximumFractionDigits: 2 });
     let mAltitude = (altitude / 1.609344).toFixed(2);
@@ -103,69 +61,72 @@ async function getISS() {
     let currentTime = formatTime.toLocaleTimeString(('en-US'));
     let currentDate = formatTime.toLocaleDateString(('en-US'));
 
-    // Initial Lat & Long data values
-    $("#lat").html(latitude);
-    $("#long").html(longitude);
+    // Show Data Values
+    function showData() {
+        // Initial Lat & Long data values
+        $("#lat").html(latitude);
+        $("#long").html(longitude);
 
-    if (miles === true) {
-        // Initial miles data values
-        $("#velocity").html(mVelocity);
-        $("#velocity-unit").html("mph XXX");
-
-        $("#altitude").html(mAltitude);
-        $("#altitude-unit").html("miles XXX");
-
-        $("#footprint").html(mFootprint);
-        $("#footprint-unit").html("miles XXX");
-
-    } else if (miles === false) {
-        // Initial kilometers data values
-        $("#velocity").html(kVelocity);
-        $("#velocity-unit").html("kmh XXX");
-
-        $("#altitude").html(kAltitude);
-        $("#altitude-unit").html("kilometers XXX");
-
-        $("#footprint").html(kFootprint);
-        $("#footprint-unit").html("kilometers XXX");
-    }
-
-    // Toggle unit conversion
-    unitConvert = function (unitToggle) {
-        if (unitToggle.checked === true) {
-            console.log("Units are in imperial");
-            miles = true;
-
+        if (miles === true) {
+            // Initial miles data values
             $("#velocity").html(mVelocity);
-            $("#velocity-unit").html("mph YYY");
+            $("#velocity-unit").html("mph");
 
             $("#altitude").html(mAltitude);
-            $("#altitude-unit").html("miles YYY");
+            $("#altitude-unit").html("miles");
 
             $("#footprint").html(mFootprint);
-            $("#footprint-unit").html("miles YYY");
-        } else if (unitToggle.checked === false) {
-            console.log("Units are in metric");
-            miles = false;
+            $("#footprint-unit").html("miles");
 
+        } else if (miles === false) {
+            // Initial kilometers data values
             $("#velocity").html(kVelocity);
-            $("#velocity-unit").html("kmh YYY");
+            $("#velocity-unit").html("kmh");
 
             $("#altitude").html(kAltitude);
-            $("#altitude-unit").html("kilometers YYY");
+            $("#altitude-unit").html("kilometers");
 
             $("#footprint").html(kFootprint);
-            $("#footprint-unit").html("kilometers YYY");
+            $("#footprint-unit").html("kilometers");
         }
-    };
 
-    // Time & Visitbility Data
-    $("#timestamp").html(currentTime);
-    $("#date").html(currentDate);
-    $("#visibility").html(visibility);
+        // Time & Visitbility Data
+        $("#timestamp").html(currentTime);
+        $("#date").html(currentDate);
+        $("#visibility").html(visibility);
 
+        unitConvert = function (unitToggle) {
+            if (unitToggle.checked === true) {
+                console.log("Units are in imperial");
+                miles = true;
 
-    // Reverse Geocode
+                $("#velocity").html(mVelocity);
+                $("#velocity-unit").html("mph");
+
+                $("#altitude").html(mAltitude);
+                $("#altitude-unit").html("miles");
+
+                $("#footprint").html(mFootprint);
+                $("#footprint-unit").html("miles");
+
+            } else if (unitToggle.checked === false) {
+                console.log("Units are in metric");
+                miles = false;
+
+                $("#velocity").html(kVelocity);
+                $("#velocity-unit").html("kmh");
+
+                $("#altitude").html(kAltitude);
+                $("#altitude-unit").html("kilometers");
+
+                $("#footprint").html(kFootprint);
+                $("#footprint-unit").html("kilometers");
+            }
+        };
+    }
+    showData();
+
+    // Reverse Geocode //////////////////////////////////////////////////////////
     const geoResponse = fetch(`https://pelias.github.io/compare/#/v1/reverse?layers=coarse&point.lat=${latitude}.lon=${longitude}`);
     const geoData = geoResponse;
     // const { properties, name } = geoData;
@@ -198,7 +159,54 @@ async function getISS() {
             $("#continent").html("Waiting...");
         }
     });
+    // Reverse Geocode //////////////////////////////////////////////////////////
+
+    // Toggle radius //////////////////////////////////////////////////////////
+    function radius() {
+        if (initializeRadius) {
+            circle.setRadius(footprint * 1000);
+            // Circle radius default is in meters, footprint value is in kilometers
+            initializeRadius = false;
+        }
+
+        radiusControl = function (radiusToggle) {
+            if (radiusToggle.checked) {
+                console.log("Radius is on");
+                circle.setRadius(footprint * 1000);
+            } else {
+                console.log("Radius is off");
+                circle.setRadius(footprint * 0)
+            }
+        };
+    };
+    radius();
+    // Toggle radius //////////////////////////////////////////////////////////
+
+    // Toggle icon centered on map //////////////////////////////////////////////////////////
+    function getCenter() {
+        if (centeredISS) {
+            mymap.setView(marker.getLatLng());
+            mymap.panTo(marker.getLatLng());
+        } else if (centeredISS === false) {
+            mymap.setView(marker);
+            mymap.panTo(marker);
+        }
+
+        centerIss = function (centerToggle) {
+            if (centerToggle.checked) {
+                console.log("ISS is centered");
+                centeredISS = true;
+            } else {
+                console.log("ISS is not centered");
+                centeredISS = false;
+            }
+        };
+    }
+    getCenter();
+    // Toggle icon centered on map //////////////////////////////////////////////////////////
+
 }
+
 
 // Toggle live data updates
 function getLiveData() {
