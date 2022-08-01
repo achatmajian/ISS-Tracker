@@ -2,19 +2,9 @@
 
 The International Space Station Tracker app allows users to the International Space Station in real time using live data such as:
 
-Vessel Data
-- Latitude
-- Longitude
-- Velocity
-- Altitude
-- Footprint
-- Visibility
+Vessel Data: Latitude, Longitude, Velocity, Altitude, Footprint, Visibility
 
-Location Data
-- Locality
-- Subdivision
-- Country
-- Continent
+Location Data: Locality, Subdivision, Country, Continent
 
 ## Deployed App Link
 
