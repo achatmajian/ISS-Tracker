@@ -1,6 +1,6 @@
 # International Space Station Tracker
 
-The International Space Station Tracker app allows users to the International Space Station in real time using live data such as:
+The International Space Station Tracker app allows users to folllow the International Space Station in real time using live data such as:
 
 Vessel Data: Latitude, Longitude, Velocity, Altitude, Footprint, Visibility
 
